@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjukta Aparna Venkatachalam — Embedded Systems Engineer</title>
+<meta name="description" content="Embedded Systems Engineer — ARM Cortex-M firmware, FreeRTOS, register-level drivers and hardware debugging. MSc Embedded Systems, University of Leeds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3EEE3; --surface:#FBF8F1; --surface2:#EEE7D9; --border:#E1D9C8; --border2:#D2C8B3;
+  --ink:#2C2820; --muted:#6C6558; --faint:#978E7D;
+  --ch1:#0E7A69; --ch1-d:#0a5b4e; --ch2:#B67A15;
+  --ch1-bg:rgba(14,122,105,.09); --ch2-bg:rgba(182,122,21,.10);
+  --disp:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+  --maxw:1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:54px 54px;opacity:.55;-webkit-mask-image:radial-gradient(circle at 50% 0%,#000 0%,transparent 65%);mask-image:radial-gradient(circle at 50% 0%,#000 0%,transparent 65%)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+.mono{font-family:var(--mono)}
+nav{position:sticky;top:0;z-index:50;-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);background:rgba(243,238,227,.8);border-bottom:1px solid var(--border)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-family:var(--mono);font-weight:700;letter-spacing:.06em;font-size:15px;display:flex;align-items:center;gap:9px;color:var(--ink)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--ch1)}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.03em;transition:color .2s}
+.nav-links a:hover{color:var(--ch1)}
+.nav-ext{display:flex;gap:14px}
+.nav-ext a{color:var(--muted);transition:color .2s}
+.nav-ext a:hover{color:var(--ink)}
+@media(max-width:760px){.nav-links{display:none}}
+.hero{position:relative;padding:74px 0 60px;overflow:hidden}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;color:var(--ch1);text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--ch1);display:inline-block}
+h1.name{font-family:var(--disp);font-weight:600;font-size:clamp(38px,7vw,68px);line-height:1.02;letter-spacing:-.02em}
+.title-line{font-family:var(--mono);font-size:clamp(13px,2.1vw,16px);color:var(--muted);margin-top:20px}
+.title-line b{color:var(--ch2);font-weight:500}
+.lede{max-width:640px;margin-top:26px;font-size:17px;color:#4a463d}
+.lede strong{color:var(--ink);font-weight:600}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.btn{font-family:var(--mono);font-size:13px;padding:12px 20px;border-radius:8px;border:1px solid var(--border2);color:var(--ink);display:inline-flex;align-items:center;gap:9px;transition:all .2s;background:var(--surface);cursor:pointer}
+.btn:hover{border-color:var(--ch1);color:var(--ch1);transform:translateY(-2px)}
+.btn.primary{background:var(--ch1);color:#fff;border-color:var(--ch1);font-weight:700}
+.btn.primary:hover{background:var(--ch1-d);color:#fff;box-shadow:0 8px 22px rgba(14,122,105,.22)}
+.badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.chip{font-family:var(--mono);font-size:11.5px;padding:6px 12px;border-radius:100px;border:1px solid var(--border2);color:var(--muted);background:var(--surface)}
+.chip.live{color:var(--ch1);border-color:var(--ch1)}
+.chip.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ch1);display:inline-block;margin-right:7px;vertical-align:middle;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.scope{margin-top:56px;border:1px solid var(--border2);border-radius:12px;background:var(--surface);padding:22px 20px 14px;position:relative;overflow:hidden}
+.scope-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.08em}
+.scope-legend{display:flex;gap:16px}.scope-legend span{display:flex;align-items:center;gap:6px}.scope-legend i{width:14px;height:2px;display:inline-block}
+.wf path{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.wf .c1{stroke:var(--ch1)}.wf .c2{stroke:var(--ch2)}
+.wf .lbl{font-family:var(--mono);font-size:11px;fill:var(--faint)}
+@media(prefers-reduced-motion:no-preference){.wf .anim{stroke-dasharray:2400;stroke-dashoffset:2400;animation:draw 2.4s ease forwards}.wf .c2.anim{animation-delay:.35s}}
+@keyframes draw{to{stroke-dashoffset:0}}
+section{padding:72px 0;position:relative}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:36px}
+.sec-addr{font-family:var(--mono);font-size:13px;color:var(--ch1);letter-spacing:.05em}
+h2{font-family:var(--disp);font-weight:600;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.01em}
+.sec-rule{flex:1;height:1px;background:var(--border2);align-self:center}
+.about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start}
+.about-grid p{color:#4a463d;font-size:16.5px;margin-bottom:16px}
+.about-grid p strong{color:var(--ink)}
+.facts{border:1px solid var(--border2);border-radius:12px;background:var(--surface);padding:6px 20px}
+.fact{display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);font-size:14px}
+.fact:last-child{border-bottom:none}
+.fact .k{font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.fact .v{text-align:right;color:var(--ink)}.fact .v.hi{color:var(--ch1);font-weight:500}
+@media(max-width:760px){.about-grid{grid-template-columns:1fr}}
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.skill-card{border:1px solid var(--border2);border-radius:12px;background:var(--surface);padding:20px 22px;transition:border-color .2s}
+.skill-card:hover{border-color:var(--ch1)}
+.skill-card h3{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ch1);margin-bottom:14px;font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:#524c40}
+@media(max-width:760px){.skills{grid-template-columns:1fr}}
+.projects{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.proj{border:1px solid var(--border2);border-left:3px solid var(--ch1);border-radius:12px;background:var(--surface);padding:24px 24px 20px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;text-align:left;width:100%;font-family:inherit;color:inherit;display:flex;flex-direction:column}
+.proj:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(44,40,34,.08);border-left-color:var(--ch1)}
+.proj:focus-visible{outline:2px solid var(--ch1);outline-offset:2px}
+.proj.amber{border-left-color:var(--ch2)}
+.proj .tagrow{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em;margin-bottom:12px}
+.proj h3{font-family:var(--disp);font-weight:600;font-size:18.5px;letter-spacing:-.01em;line-height:1.2}
+.proj .what{margin-top:10px;font-size:14.5px;color:#4a463d;flex:1}
+.proj .more-link{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--ch1);display:inline-flex;align-items:center;gap:6px}
+.proj.amber .more-link{color:var(--ch2)}
+.proj .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.pill{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--faint)}
+@media(max-width:760px){.projects{grid-template-columns:1fr}}
+.more{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px}
+.more-card{border:1px solid var(--border2);border-radius:12px;background:var(--surface);padding:20px;transition:border-color .2s}
+.more-card:hover{border-color:var(--ch1)}
+.more-card h4{font-family:var(--disp);font-weight:500;font-size:15px;margin-bottom:8px}
+.more-card h4 a{color:var(--ink)}.more-card h4 a:hover{color:var(--ch1)}
+.more-card p{font-size:13.5px;color:var(--muted);line-height:1.55}
+.more-card .rl{font-family:var(--mono);font-size:11px;color:var(--ch1);margin-top:10px;display:inline-block}
+@media(max-width:760px){.more{grid-template-columns:1fr}}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.tl{position:relative;padding-left:24px}
+.tl::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:26px}.tl-item:last-child{margin-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-24px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:2px solid var(--ch1)}
+.tl-item .role{font-family:var(--disp);font-weight:500;font-size:16px}
+.tl-item .org{font-size:14px;color:var(--muted)}
+.tl-item .date{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin:3px 0 7px;letter-spacing:.03em}
+.tl-item .desc{font-size:14px;color:#4a463d;line-height:1.55}
+@media(max-width:760px){.exp-grid{grid-template-columns:1fr;gap:44px}}
+.ach{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ach-item{border:1px solid var(--border2);border-radius:10px;background:var(--surface);padding:16px 18px;font-size:14.5px;color:#4a463d;display:flex;gap:12px;align-items:flex-start}
+.ach-item .m{font-family:var(--mono);color:var(--ch2);font-size:13px;flex-shrink:0}
+.ach-item.star{border-color:var(--ch2);background:var(--ch2-bg)}
+@media(max-width:760px){.ach{grid-template-columns:1fr}}
+.contact{text-align:center;padding:88px 0 68px}
+.contact h2{margin-bottom:16px}
+.contact p{color:var(--muted);max-width:520px;margin:0 auto 30px;font-size:16px}
+.contact-links{display:flex;justify-content:center;flex-wrap:wrap;gap:14px}
+footer{border-top:1px solid var(--border2);padding:26px 0;text-align:center}
+footer .mono{font-size:12px;color:var(--faint);letter-spacing:.04em}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+.certs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cert{border:1px solid var(--border2);border-radius:10px;background:var(--surface);padding:16px 18px;transition:border-color .2s,transform .2s;display:block}
+.cert:hover{border-color:var(--ch1);transform:translateY(-2px)}
+.cert-h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.cert-t{font-family:var(--disp);font-weight:500;font-size:15px;color:var(--ink);line-height:1.3}
+.cert-v{color:var(--ch1);font-size:13px;flex-shrink:0}
+.cert-m{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:8px;letter-spacing:.02em}
+@media(max-width:760px){.certs{grid-template-columns:1fr}}
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
+.modal.open{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(44,40,34,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.modal-card{position:relative;z-index:1;max-width:620px;width:100%;max-height:86vh;overflow-y:auto;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:34px 34px 30px;box-shadow:0 24px 60px rgba(44,40,34,.28)}
+.modal-card .m-tag{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.05em;margin-bottom:12px}
+.modal-card h3{font-family:var(--disp);font-weight:600;font-size:24px;letter-spacing:-.01em;padding-right:30px}
+.modal-card .m-body{margin-top:16px}
+.modal-card .m-body p{font-size:15.5px;color:#443f37;margin-bottom:14px;line-height:1.68}
+.modal-card .pills{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0 22px}
+.modal-card .pill{font-size:11px;padding:4px 9px}
+.m-actions{display:flex;gap:12px;flex-wrap:wrap}
+.m-close{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:8px;border:1px solid var(--border2);background:var(--bg);color:var(--muted);font-size:18px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.m-close:hover{color:var(--ink);border-color:var(--ch1)}
+.m-note{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:12px}
+</style>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+<nav><div class="nav-in">
+  <a href="#top" class="brand"><span class="dot"></span>SV</a>
+  <div class="nav-links"><a href="#about">about</a><a href="#skills">skills</a><a href="#projects">projects</a><a href="#experience">experience</a><a href="#certs">certs</a><a href="#contact">contact</a></div>
+  <div class="nav-ext">
+    <a href="https://github.com/Sanjukta23" target="_blank" rel="noopener" aria-label="GitHub"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+    <a href="https://linkedin.com/in/sanjukta23" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.3a1.8 1.8 0 110-3.5 1.8 1.8 0 010 3.5zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6S12.6 13 12.6 14.2V19h-3v-9h2.9v1.2h.1a3.2 3.2 0 012.9-1.6c3.1 0 3.7 2 3.7 4.7z"/></svg></a>
+  </div>
+</div></nav>
+<div id="top"></div>
+<header class="hero"><div class="wrap">
+  <div class="eyebrow reveal">Embedded Systems Engineer · Leeds, UK</div>
+  <h1 class="name reveal">Sanjukta Aparna<br>Venkatachalam</h1>
+  <div class="title-line reveal">ARM Cortex-M Firmware &nbsp;·&nbsp; FreeRTOS &nbsp;·&nbsp; <b>Register-Level Drivers</b> &nbsp;·&nbsp; Hardware Debug</div>
+  <p class="lede reveal">I take embedded systems from <strong>datasheet to working board</strong> — bare-metal drivers written straight from the reference manual, a custom UART bootloader, and a <strong>LoRa fault-detection network</strong> — a filed patent application — built end to end — with supporting depth in Verilog/FPGA and Cortex-A9 NEON DSP.</p>
+  <div class="cta-row reveal">
+    <a href="#projects" class="btn primary">View projects &rarr;</a>
+    <a href="Sanjukta_Venkatachalam_CV.pdf" class="btn" target="_blank">Download CV</a>
+    <a href="https://github.com/Sanjukta23" class="btn" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <div class="badge-row reveal">
+    <span class="chip">MSc Embedded Systems · Leeds</span>
+    <span class="chip">Predicted Distinction</span>
+    <span class="chip live">UK Graduate Route to 2028 — no sponsorship</span>
+  </div>
+  <div class="scope reveal" aria-hidden="true">
+    <div class="scope-top"><span>LOGIC ANALYSER · 8-CH · 24 MS/s</span><div class="scope-legend"><span><i style="background:var(--ch1)"></i>CH1 · CLK</span><span><i style="background:var(--ch2)"></i>CH2 · MOSI</span></div></div>
+    <svg class="wf" viewBox="0 0 900 130" width="100%" height="120" preserveAspectRatio="none" role="img"><title>Animated SPI timing diagram</title>
+      <text class="lbl" x="4" y="34">CLK</text><text class="lbl" x="4" y="98">DATA</text>
+      <path class="c1 anim" d="M60,45 L60,20 L90,20 L90,45 L120,45 L120,20 L150,20 L150,45 L180,45 L180,20 L210,20 L210,45 L240,45 L240,20 L270,20 L270,45 L300,45 L300,20 L330,20 L330,45 L360,45 L360,20 L390,20 L390,45 L420,45 L420,20 L450,20 L450,45 L480,45 L480,20 L510,20 L510,45 L540,45 L540,20 L570,20 L570,45 L600,45 L600,20 L630,20 L630,45 L660,45 L660,20 L690,20 L690,45 L720,45 L720,20 L750,20 L750,45 L780,45 L780,20 L810,20 L810,45 L840,45"/>
+      <path class="c2 anim" d="M60,110 L90,110 L120,85 L150,85 L180,110 L210,110 L240,85 L300,85 L330,110 L390,110 L420,85 L450,85 L480,110 L540,110 L570,85 L630,85 L660,110 L690,110 L720,85 L780,85 L810,110 L840,110"/>
+    </svg>
+  </div>
+</div></header>
+
+<section id="about"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x01</span><h2>About</h2><span class="sec-rule"></span></div>
+  <div class="about-grid">
+    <div class="reveal">
+      <p>I'm an embedded systems engineer finishing an <strong>MSc at the University of Leeds</strong> (predicted Distinction), most at home at the register level — writing bare-metal firmware, bringing up hardware, and chasing bugs down to the bit with a logic analyser and SWD.</p>
+      <p>My work spans a <strong>from-scratch STM32 driver library</strong> (no HAL), a <strong>custom UART bootloader</strong> with in-field update and failsafe recovery, and a distributed <strong>LoRa fault-detection network</strong> that became a filed patent application. I also work across Verilog/FPGA on a Cyclone V and Cortex-A9 NEON DSP.</p>
+      <p>I'm methodical and validation-first: I like to prove a design against requirements and against live signals before I trust it. Currently seeking graduate embedded / firmware / FPGA roles in the UK.</p>
+    </div>
+    <div class="facts reveal">
+      <div class="fact"><span class="k">Focus</span><span class="v">Bare-metal firmware</span></div>
+      <div class="fact"><span class="k">Core MCU</span><span class="v">STM32 Cortex-M4F</span></div>
+      <div class="fact"><span class="k">Patent</span><span class="v hi">Application filed</span></div>
+      <div class="fact"><span class="k">Degree</span><span class="v">MSc · Distinction*</span></div>
+      <div class="fact"><span class="k">Location</span><span class="v">Leeds, UK</span></div>
+      <div class="fact"><span class="k">Right to work</span><span class="v hi">Grad Route &rarr; 2028</span></div>
+      <div class="fact"><span class="k">English</span><span class="v">IELTS 7.5</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="skills"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x02</span><h2>Skills</h2><span class="sec-rule"></span></div>
+  <div class="skills">
+    <div class="skill-card reveal"><h3>Embedded &amp; Architecture</h3><div class="tags"><span class="tag">ARM Cortex-M4F</span><span class="tag">exception model</span><span class="tag">NVIC</span><span class="tag">MSP/PSP</span><span class="tag">memory map</span><span class="tag">MPU</span><span class="tag">FreeRTOS</span><span class="tag">bare-metal</span><span class="tag">interrupts</span><span class="tag">timers</span><span class="tag">PWM</span><span class="tag">RTC</span><span class="tag">DMA</span><span class="tag">low-power</span></div></div>
+    <div class="skill-card reveal"><h3>Protocols</h3><div class="tags"><span class="tag">SPI</span><span class="tag">I²C</span><span class="tag">CAN</span><span class="tag">UART/USART</span><span class="tag">LoRa 868 MHz</span><span class="tag">Wi-Fi</span></div></div>
+    <div class="skill-card reveal"><h3>Languages</h3><div class="tags"><span class="tag">C</span><span class="tag">Embedded C</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">Verilog RTL</span><span class="tag">ARM Assembly</span><span class="tag">MATLAB</span></div></div>
+    <div class="skill-card reveal"><h3>FPGA / RTL</h3><div class="tags"><span class="tag">Verilog RTL</span><span class="tag">Intel Cyclone V</span><span class="tag">Quartus Prime</span><span class="tag">ModelSim</span></div></div>
+    <div class="skill-card reveal"><h3>Debug &amp; Tools</h3><div class="tags"><span class="tag">Saleae logic analyser</span><span class="tag">oscilloscope</span><span class="tag">SWD/JTAG</span><span class="tag">SEGGER SystemView</span><span class="tag">ITM/SWV</span><span class="tag">Wireshark</span><span class="tag">GCC/ARM</span><span class="tag">linker scripts</span><span class="tag">CMSIS</span><span class="tag">STM32CubeIDE</span><span class="tag">Keil µVision</span><span class="tag">Git</span></div></div>
+    <div class="skill-card reveal"><h3>Hardware &amp; Practice</h3><div class="tags"><span class="tag">hardware bring-up</span><span class="tag">schematic reading</span><span class="tag">IMU/MPU6050</span><span class="tag">Kalman filtering</span><span class="tag">requirements-first validation</span><span class="tag">technical docs</span></div></div>
+  </div>
+</div></section>
+
+<section id="projects"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x03</span><h2>Key projects</h2><span class="sec-rule"></span></div>
+  <div class="projects">
+    <button class="proj reveal" data-proj="driver">
+      <div class="tagrow">FIRMWARE · BARE-METAL</div>
+      <h3>Bare-Metal STM32 Peripheral Driver Library</h3>
+      <div class="what">Register-level drivers for GPIO, SPI, I²C, USART and EXTI on the STM32 Cortex-M4F — from the reference manual, no vendor HAL.</div>
+      <div class="pills"><span class="pill">Embedded C</span><span class="pill">GPIO</span><span class="pill">SPI/I²C</span><span class="pill">USART/EXTI</span><span class="pill">Saleae</span></div>
+      <span class="more-link">Read details &rarr;</span>
+    </button>
+    <button class="proj reveal" data-proj="flash">
+      <div class="tagrow">FIRMWARE · BOOTLOADER</div>
+      <h3>FlashForge — Custom STM32 Bootloader</h3>
+      <div class="what">A bootloader that updates application firmware over UART and recovers safely if an update is interrupted.</div>
+      <div class="pills"><span class="pill">Embedded C</span><span class="pill">UART · CRC-32</span><span class="pill">flash</span><span class="pill">Python</span></div>
+      <span class="more-link">Read details &rarr;</span>
+    </button>
+    <button class="proj amber reveal" data-proj="lora">
+      <div class="tagrow">DISSERTATION · PATENT FILED</div>
+      <h3>Broken Power-Line Detection over LoRa</h3>
+      <div class="what">A distributed LoRa sensor network that detects and locates breaks in overhead power lines. Filed as a patent application.</div>
+      <div class="pills"><span class="pill">LoRa 868 MHz</span><span class="pill">ESP32</span><span class="pill">Raspberry Pi</span><span class="pill">Flask</span></div>
+      <span class="more-link">Read details &rarr;</span>
+    </button>
+    <button class="proj reveal" data-proj="fpga">
+      <div class="tagrow">FPGA · TEAM PROJECT</div>
+      <h3>Pre-Trade Risk Filter — FPGA</h3>
+      <div class="what">A hardware risk filter that vets trade orders against ten rules in nanoseconds, built in Verilog on a Cyclone V.</div>
+      <div class="pills"><span class="pill">Verilog</span><span class="pill">Cyclone V</span><span class="pill">FSM · BCD</span><span class="pill">ModelSim</span></div>
+      <span class="more-link">Read details &rarr;</span>
+    </button>
+    <button class="proj reveal" data-proj="neon">
+      <div class="tagrow">DSP · TEAM PROJECT</div>
+      <h3>Cortex-A9 NEON SIMD DSP</h3>
+      <div class="what">A bare-metal DSP suite comparing plain C against NEON SIMD-accelerated signal processing on a DE1-SoC.</div>
+      <div class="pills"><span class="pill">NEON SIMD</span><span class="pill">Cortex-A9</span><span class="pill">FIR · FFT</span><span class="pill">bare-metal C</span></div>
+      <span class="more-link">Read details &rarr;</span>
+    </button>
+    <button class="proj reveal" data-proj="dma">
+      <div class="tagrow">FIRMWARE · DMA</div>
+      <h3>STM32 DMA — Memory &amp; Peripheral Transfers</h3>
+      <div class="what">Moving blocks of data between memory and peripherals without tying up the CPU — built both bare-metal and with HAL on the STM32F446.</div>
+      <div class="pills"><span class="pill">DMA</span><span class="pill">SRAM-to-SRAM</span><span class="pill">ADC/UART</span><span class="pill">register-level</span></div>
+      <span class="more-link">Read details &rarr;</span>
+    </button>
+  </div>
+</div></section>
+
+<section id="more"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x04</span><h2>Also on GitHub</h2><span class="sec-rule"></span></div>
+  <div class="more">
+    <div class="more-card reveal"><h4><a href="https://github.com/Sanjukta23/stm32f4466xx_advanced_peripherals" target="_blank" rel="noopener">Advanced STM32 Peripherals</a></h4><p>STM32F446 bring-up with HAL — CAN, timers, PWM and input capture, RTC alarms and low-power modes: the peripherals real products lean on.</p><a class="rl" href="https://github.com/Sanjukta23/stm32f4466xx_advanced_peripherals" target="_blank" rel="noopener">&#8599; stm32f4466xx_advanced_peripherals</a></div>
+    <div class="more-card reveal"><h4><a href="https://github.com/Sanjukta23/RTOS" target="_blank" rel="noopener">FreeRTOS on Cortex-M4</a></h4><p>FreeRTOS on the STM32F446 — task scheduling, queues, binary and counting semaphores, traced live over UART with SEGGER SystemView.</p><a class="rl" href="https://github.com/Sanjukta23/RTOS" target="_blank" rel="noopener">&#8599; RTOS</a></div>
+    <div class="more-card reveal"><h4><a href="https://github.com/Sanjukta23/STM32nucleo_basics" target="_blank" rel="noopener">STM32 Fundamentals</a></h4><p>Hands-on microcontroller groundwork — GPIO, button and keypad input, LED control, interrupts, stack usage and bitwise work.</p><a class="rl" href="https://github.com/Sanjukta23/STM32nucleo_basics" target="_blank" rel="noopener">&#8599; STM32nucleo_basics</a></div>
+    <div class="more-card reveal"><h4><a href="https://github.com/Sanjukta23/Verilog_basics_projects" target="_blank" rel="noopener">Verilog Foundations</a></h4><p>Introductory Verilog RTL — combinational and sequential logic, finite state machines and testbench-driven simulation.</p><a class="rl" href="https://github.com/Sanjukta23/Verilog_basics_projects" target="_blank" rel="noopener">&#8599; Verilog_basics_projects</a></div>
+  </div>
+  <div style="margin-top:20px" class="reveal"><a class="btn" href="https://github.com/Sanjukta23" target="_blank" rel="noopener" style="display:inline-flex">&#8599; View all repositories</a></div>
+</div></section>
+
+<section id="experience"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x05</span><h2>Experience &amp; education</h2><span class="sec-rule"></span></div>
+  <div class="exp-grid">
+    <div class="reveal"><div class="tl">
+      <div class="tl-item"><div class="role">Engineer Tomorrow Scheme</div><div class="org">Parker Hannifin, UK</div><div class="date">FEB 2026 – APR 2026</div><div class="desc">Selected onto a competitive industry scheme; designed a conceptual filtration system in CAD applying design and optimisation principles, and supported peers through technical problem-solving.</div></div>
+      <div class="tl-item"><div class="role">Engineering Intern</div><div class="org">Neyveli Lignite Corporation (NLC) India Ltd.</div><div class="date">JUN 2024</div><div class="desc">Placed on a 210 MW+ thermal generation site; studied turbine control, substation automation and SCADA fault-protection alongside senior engineers.</div></div>
+      <div class="tl-item"><div class="role">Implant Trainee (Electrical)</div><div class="org">Tamil Nadu Transmission Corporation (TANTRANSCO)</div><div class="date">JUN 2023 · APPRENTICESHIP</div><div class="desc">Substation apprenticeship — routine inspection and fault resolution on electrical equipment, support for maintenance and upgrade work, and compliance logging at a live transmission site.</div></div>
+      <div class="tl-item"><div class="role">Embedded / IoT Intern</div><div class="org">Verzeo</div><div class="date">OCT 2022 – NOV 2022</div><div class="desc">Developed Arduino and ESP32 IoT prototypes with cloud integration for remote monitoring and data visualisation, validating reliable data transmission across each build.</div></div>
+    </div></div>
+    <div class="reveal"><div class="tl">
+      <div class="tl-item"><div class="role">MSc Embedded Systems Engineering</div><div class="org">University of Leeds, UK</div><div class="date">SEP 2025 – SEP 2026</div><div class="desc">Predicted Distinction. Dissertation: LoRa broken-power-line detection network (patent application filed).</div></div>
+      <div class="tl-item"><div class="role">B.E. Electrical &amp; Electronics Engineering</div><div class="org">Alagappa Chettiar Govt. College, India</div><div class="date">NOV 2021 – APR 2025</div><div class="desc">CGPA 8.13 / 10.</div></div>
+    </div></div>
+  </div>
+</div></section>
+
+<section id="achievements"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x06</span><h2>Achievements &amp; leadership</h2><span class="sec-rule"></span></div>
+  <div class="ach">
+    <div class="ach-item star reveal"><span class="m">&#9670;</span><div><strong>Patent application filed</strong> — Smart Electric Pole Fault Detection System (published). Top 20 of 800 teams at the NESIA National Engineering Innovation Challenge.</div></div>
+    <div class="ach-item reveal"><span class="m">&#9657;</span><div><strong>Outstanding Poster Presentation</strong> — International Leadership Summit, Leeds. <strong>1st &amp; 2nd Prize</strong> in consecutive years — College Project Expo (Thiran).</div></div>
+    <div class="ach-item reveal"><span class="m">&#9657;</span><div><strong>Event Head, EEE Association</strong> — organised three public events for 500+ attendees. Associate Student Member, IEEE Women in Engineering; Volunteer, National Service Scheme.</div></div>
+    <div class="ach-item reveal"><span class="m">&#9657;</span><div><strong>Part-time work alongside full-time MSc</strong> — University of Leeds conferences &amp; catering, First Direct Arena and Primark, while studying full-time.</div></div>
+  </div>
+</div></section>
+
+
+<section id="certs"><div class="wrap">
+  <div class="sec-head reveal"><span class="sec-addr">0x07</span><h2>Certifications</h2><span class="sec-rule"></span></div>
+  <p class="reveal" style="color:var(--muted);font-size:15px;margin:-14px 0 26px;max-width:640px">Around 113 hours of hands-on embedded coursework from FastBit Embedded Brain Academy on Udemy — the grounding behind the register-level firmware in my projects. Each certificate is verifiable.</p>
+  <div class="certs">
+    <a class="cert reveal" href="https://ude.my/UC-106a61d7-dbda-4ecb-aa3e-b0bc385d74a8" target="_blank" rel="noopener"><div class="cert-h"><span class="cert-t">Mastering Microcontroller &amp; Embedded Driver Development</span><span class="cert-v">&#8599;</span></div><div class="cert-m">Udemy · FastBit Embedded Brain Academy · 28.5 h</div></a>
+    <a class="cert reveal" href="https://ude.my/UC-d8b3b7a9-a439-4dfe-8868-5ed3ae077866" target="_blank" rel="noopener"><div class="cert-h"><span class="cert-t">Mastering Microcontroller: Timers, PWM, CAN, Low Power (MCU2)</span><span class="cert-v">&#8599;</span></div><div class="cert-m">Udemy · FastBit Embedded Brain Academy · 29 h</div></a>
+    <a class="cert reveal" href="https://ude.my/UC-8ef5b9a0-c4a2-4b48-bf85-4f6f47886938" target="_blank" rel="noopener"><div class="cert-h"><span class="cert-t">Mastering RTOS: Hands-on FreeRTOS &amp; STM32Fx with Debugging</span><span class="cert-v">&#8599;</span></div><div class="cert-m">Udemy · FastBit Embedded Brain Academy · 14 h</div></a>
+    <a class="cert reveal" href="https://ude.my/UC-434cb23d-4c9f-4098-9491-f2d0c117efbe" target="_blank" rel="noopener"><div class="cert-h"><span class="cert-t">ARM Cortex-M Microcontroller DMA Programming Demystified</span><span class="cert-v">&#8599;</span></div><div class="cert-m">Udemy · FastBit Embedded Brain Academy · 10 h</div></a>
+    <a class="cert reveal" href="https://ude.my/UC-2d78ff8a-bfb1-4f4d-acdd-c7182dc7db73" target="_blank" rel="noopener"><div class="cert-h"><span class="cert-t">Embedded Systems Programming on ARM Cortex-M3/M4</span><span class="cert-v">&#8599;</span></div><div class="cert-m">Udemy · FastBit Embedded Brain Academy · 15 h</div></a>
+    <a class="cert reveal" href="https://ude.my/UC-14b26b09-0c75-4427-88f6-5039f8873fda" target="_blank" rel="noopener"><div class="cert-h"><span class="cert-t">Microcontroller Embedded C Programming: Absolute Beginners</span><span class="cert-v">&#8599;</span></div><div class="cert-m">Udemy · FastBit Embedded Brain Academy · 16.5 h</div></a>
+  </div>
+</div></section>
+
+<section class="contact" id="contact"><div class="wrap"><div class="reveal">
+  <div class="sec-addr mono" style="margin-bottom:14px">0x08 · CONTACT</div>
+  <h2>Let's build something at the register level.</h2>
+  <p>Open to graduate embedded, firmware and FPGA roles across the UK. No sponsorship required.</p>
+  <div class="contact-links">
+    <a class="btn primary" href="mailto:sanjuktaa23@gmail.com">sanjuktaa23@gmail.com</a>
+    <a class="btn" href="https://linkedin.com/in/sanjukta23" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn" href="https://github.com/Sanjukta23" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn" href="Sanjukta_Venkatachalam_CV.pdf" target="_blank">CV (PDF)</a>
+  </div>
+</div></div></section>
+<footer><div class="wrap"><span class="mono">Sanjukta Aparna Venkatachalam · Leeds, UK · built from the datasheet up</span></div></footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="m-close" data-close aria-label="Close">&times;</button>
+    <div class="m-tag" id="m-tag"></div>
+    <h3 id="m-title"></h3>
+    <div class="m-body" id="m-body"></div>
+    <div class="pills" id="m-pills"></div>
+    <div class="m-actions" id="m-actions"></div>
+    <div class="m-note" id="m-note"></div>
+  </div>
+</div>
+
+<script>
+var DATA={
+  driver:{tag:"FIRMWARE · BARE-METAL · Embedded C · Cortex-M4F",title:"Bare-Metal STM32 Peripheral Driver Library",
+    body:["This is a from-the-ground-up driver library for the STM32F4, built by reading the reference manual register by register instead of leaning on ST's HAL. It covers the peripherals a real product actually touches — GPIO, SPI, I\u00B2C, USART and external interrupts (EXTI) — each exposed through a small, predictable API with blocking, interrupt-driven and slave-mode variants.",
+      "The goal wasn't just to make the hardware move; it was to understand why vendor abstraction layers are shaped the way they are, so I can drop below them when a design calls for it. Every driver was checked against real bus traffic on an 8-channel logic analyser before I trusted it, so the timing and framing are verified against silicon rather than a simulator."],
+    pills:["Embedded C","GPIO","SPI","I\u00B2C","USART","EXTI","Saleae"],url:"https://github.com/Sanjukta23/Driver_development",repo:"Driver_development"},
+  flash:{tag:"FIRMWARE · BOOTLOADER · Embedded C · Cortex-M4F",title:"FlashForge — Custom STM32 Bootloader",
+    body:["FlashForge answers a problem every shipped embedded product eventually faces: how do you update the firmware in the field without a programmer? It receives a new application image over a framed UART link with CRC-32 integrity checks, writes it into internal flash through a register-level flash driver, validates an application header, and then hands control cleanly to the new app.",
+      "Getting that handover right was the interesting part — I tracked down a fault where interrupts left disabled during the jump would hang the application, and fixed it by clearing pending interrupts and re-enabling them so the new firmware starts from a known state. A Python host tool drives the update from a PC, and the whole flow recovers safely if an update is cut off midway."],
+    pills:["Embedded C","UART","CRC-32","flash programming","NVIC","Python"],url:"https://github.com/Sanjukta23/flashforge",repo:"flashforge"},
+  lora:{tag:"MSc DISSERTATION · PATENT FILED",title:"Broken Power-Line Detection over LoRa",
+    body:["This was my master's dissertation and the project that became a filed patent application. It detects broken overhead power lines by listening for silence: battery-powered ESP32 nodes spaced along a line send periodic heartbeats over an 868 MHz LoRa link, and when a segment stops reporting, the system infers a fault and localises it to that segment.",
+      "I designed the wireless protocol from scratch — packet format, node addressing, a private sync word, interrupt-driven receive, and the heartbeat-and-miss-limit logic — and built the Raspberry Pi gateway that collects events, logs them, raises email alerts and serves a live dashboard. I modelled the link budget in MATLAB first and validated the design against requirements before committing to hardware, which kept the build from turning into rework."],
+    pills:["LoRa 868 MHz","ESP32","RFM95W","Raspberry Pi","Python / Flask","MATLAB"],url:"https://github.com/Sanjukta23/BrokenLineDetection",repo:"BrokenLineDetection",note:"Patent application filed on the fault-detection method (published)."},
+  fpga:{tag:"FPGA · TEAM PROJECT · Verilog · Cyclone V",title:"Pre-Trade Risk Filter — FPGA",
+    body:["A pre-trade risk filter is the safety gate between a trading system and the market — it catches dangerous orders like a fat-finger quantity, an out-of-bounds price or a halted stock before they can do damage. In software that check is too slow for high-frequency trading, so our team built it directly in FPGA logic on a Cyclone V (DE1-SoC).",
+      "Orders entered on a keypad are checked against ten hardwired rules by a risk engine that returns a PASS or FAIL verdict, and the design measures the order-to-decision latency — around 20 nanoseconds — on a live display; the logic was verified in ModelSim before board bring-up. My part was that timing-and-display path: a hardware timer, the control state machine, binary-to-BCD conversion, and the seven-segment / LED latency readout."],
+    pills:["Verilog RTL","Intel Cyclone V","FSM","binary-to-BCD","seven-segment","ModelSim"],url:"https://github.com/Sanjukta23/fpga-pretrade-risk-filter",repo:"fpga-pretrade-risk-filter"},
+  neon:{tag:"DSP · TEAM PROJECT · Cortex-A9 · bare-metal C",title:"Cortex-A9 NEON SIMD DSP",
+    body:["This project explores how much speed you can win by hand-vectorising DSP on an ARM Cortex-A9 with NEON SIMD, running bare-metal on a DE1-SoC with no operating system underneath. The suite covers audio and software-defined-radio FIR filtering, FFT, Kalman filtering of accelerometer data, and image median filtering — each written twice, once in scalar C and once with NEON intrinsics, so the two can be benchmarked for correctness and speed.",
+      "My contribution was the SDR FIR path, where NEON gave a clean 5\u00D7 speed-up over scalar, and the profiling of a median-filter case that actually ran slower than scalar at 0.75\u00D7. I traced that regression to branch divergence and non-contiguous memory access — a useful reminder that SIMD only pays off when the data access pattern cooperates."],
+    pills:["NEON SIMD","Cortex-A9","FIR","FFT","Kalman","profiling"],url:"https://github.com/Sanjukta23/Cyclone-V-barremetal-DSP-Library",repo:"Cyclone-V-barremetal-DSP-Library"},
+  dma:{tag:"FIRMWARE · DMA · STM32F446 · register-level + HAL",title:"STM32 DMA — Memory & Peripheral Transfers",
+    body:["DMA is what lets a microcontroller move blocks of data — memory to memory, or between peripherals and memory — without the CPU shepherding every byte, which is what keeps real-time firmware responsive under load. This project works through the STM32F446's DMA controller from both sides: the register level and ST's HAL.",
+      "It covers memory-to-memory (SRAM to SRAM), peripheral paths such as ADC-to-SRAM and UART transfers, and the stream, channel and interrupt plumbing that makes them fire correctly. Building each path bare-metal and with HAL side by side makes the abstraction visible — you can see exactly what the library configures underneath."],
+    pills:["DMA","SRAM-to-SRAM","ADC-to-SRAM","UART","register-level","HAL"],url:"https://github.com/Sanjukta23/DMA",repo:"DMA"}
+};
+(function(){
+  var modal=document.getElementById('modal'),mTag=document.getElementById('m-tag'),mTitle=document.getElementById('m-title'),
+      mBody=document.getElementById('m-body'),mPills=document.getElementById('m-pills'),mAct=document.getElementById('m-actions'),mNote=document.getElementById('m-note');
+  function open(id){
+    var d=DATA[id]; if(!d)return;
+    mTag.textContent=d.tag; mTitle.textContent=d.title;
+    mBody.innerHTML=d.body.map(function(p){return '<p>'+p+'</p>'}).join('');
+    mPills.innerHTML=d.pills.map(function(p){return '<span class="pill">'+p+'</span>'}).join('');
+    mAct.innerHTML='<a class="btn primary" href="'+d.url+'" target="_blank" rel="noopener">View on GitHub &#8599;</a>';
+    mNote.textContent=(d.note?d.note+'  ':'')+'Repo: '+d.repo;
+    modal.classList.add('open'); document.body.style.overflow='hidden';
+  }
+  function close(){modal.classList.remove('open'); document.body.style.overflow='';}
+  document.querySelectorAll('.proj').forEach(function(b){b.addEventListener('click',function(){open(b.getAttribute('data-proj'))})});
+  modal.querySelectorAll('[data-close]').forEach(function(e){e.addEventListener('click',close)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+})();
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>
