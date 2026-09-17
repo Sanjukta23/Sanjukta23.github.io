@@ -495,7 +495,7 @@
 
 <div class="rm-root" id="rmRoot">
   <div class="rm-title">FIRMWARE ROADMAP // 62-DAY BUILD</div>
-  <div class="rm-sub">Sun 31 Aug &mdash; Fri 31 Oct 2026 &middot; Rust fundamentals &rarr; Secure Bootloader 2.0 (Rust rewrite) &rarr; Cortex-M internals &rarr; interview push</div>
+  <div class="rm-sub">Thu 17 Sep &mdash; Tue 17 Nov 2026 &middot; Rust fundamentals &rarr; Secure Bootloader 2.0 (Rust rewrite) &rarr; Cortex-M internals &rarr; interview push</div>
 
   <div class="rm-stats" id="rmStats"></div>
 
@@ -520,6 +520,7 @@
       <button class="rm-mbtn" id="rmHitMe">Hit me 👊</button>
       <button class="rm-mbtn ghost" id="rmNotifToggle">Enable pop-ups</button>
       <button class="rm-mbtn ghost" id="rmTestToast">Preview pop-up</button>
+      <button class="rm-mbtn ghost armed" id="rmSoundToggle">Sound 🔊 on</button>
     </div>
     <div class="rm-timer-row">
       <span class="rm-timer-lbl">Nag me every</span>
@@ -554,7 +555,7 @@
 <script>
 (function(){
   const STORAGE_KEY = 'sanju-roadmap-v5-state';
-  const START_DATE = new Date(2026,7,31); // Aug 31 2026 (month index 7 = Aug)
+  const START_DATE = new Date(2026,8,17); // Sep 17 2026 (month index 8 = Sep)
   const TOTAL_DAYS = 62;
 
   let state = { days: {} };
@@ -886,10 +887,19 @@
     "Break's over. The streak doesn't care about your feelings.",
     "Somebody with half your projects is applying right now. Out-work them."
   ];
-  let lastQ = -1;
+  // Shuffled bag: walk through every quote once before any repeats, then reshuffle.
+  let quoteBag = [];
+  function shuffleBag(){
+    quoteBag = QUOTES.map((_,i)=>i);
+    for(let i=quoteBag.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [quoteBag[i],quoteBag[j]] = [quoteBag[j],quoteBag[i]];
+    }
+  }
   function nextQuote(){
-    let i; do { i = Math.floor(Math.random()*QUOTES.length); } while(i===lastQ && QUOTES.length>1);
-    lastQ = i; return QUOTES[i];
+    if(quoteBag.length===0) shuffleBag();
+    const idx = quoteBag.pop();
+    return QUOTES[idx];
   }
 
   const qEl = document.getElementById('rmQuote');
@@ -922,10 +932,35 @@
     el.innerHTML = ok ? `last pop-up fired <b>${t}</b>` : `timer fired <b>${t}</b> — pop-up blocked, showing toast`;
   }
 
+  // Short two-tone beep, generated in-page (no audio file needed).
+  let audioCtx = null;
+  let soundOn = true;
+  function playBeep(){
+    if(!soundOn) return;
+    try{
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      // two quick rising notes
+      [ [880,0], [1174,0.13] ].forEach(([freq,off])=>{
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, now+off);
+        gain.gain.exponentialRampToValueAtTime(0.25, now+off+0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now+off+0.12);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(now+off); osc.stop(now+off+0.13);
+      });
+    }catch(e){ /* audio not available */ }
+  }
+
   // Plain OS notification — same mechanism bennish.net uses successfully.
   function fireNotification(text){
     const today = realTodayIndex();
     const title = `🔥 Roadmap — Day ${today}`;
+    playBeep();
     let delivered = false;
     if('Notification' in window && Notification.permission === 'granted'){
       try{
@@ -957,6 +992,14 @@
   document.getElementById('rmTestToast').addEventListener('click', ()=>{
     fireNotification(nextQuote());
     swapQuote();
+  });
+
+  const soundBtn = document.getElementById('rmSoundToggle');
+  soundBtn.addEventListener('click', ()=>{
+    soundOn = !soundOn;
+    soundBtn.textContent = soundOn ? 'Sound 🔊 on' : 'Sound 🔇 off';
+    soundBtn.classList.toggle('armed', soundOn);
+    if(soundOn) playBeep(); // also unlocks audio on user gesture
   });
 
   // ---- nag timer ----
